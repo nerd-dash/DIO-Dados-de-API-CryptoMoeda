@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title>Criptomoedas</title>
+</head>
+<body>
+
+    <div class="container">
+        <h2>Criptomoedas</h2>
+        <div id="coins">
+           
+        </div>
+    </div>
+
+    <script>
+
+        
+
+
+        const api = {
+            key : '650cf9e8-2416-4382-87e2-9afc9afab020'
+        };
+
+        fetch(`https://pro-api.coinmarketcap.com/v1/cryptocurrency/map?CMC_PRO_API_KEY=${api.key}`)
+        .then(response => {
+            if(!response.ok){
+                throw new Error(`Erro ao executar a requisição. Rertornou o status ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(api => {
+            // Manipular dados da api
+
+            let coinsContentHTML = '';
+
+            for(let i = 0; i < 10; i++){
+                coinsContentHTML += `
+                <div class="media">
+                    <img src="https://s2.coinmarketcap.com/static/img/coins/64x64/${api.data[i].id}.png" alt="Litecoin">
+                </div>
+                <div class="media-body">
+                    <h5 class="mt-2">${api.data[i].name}</h5>
+                    <p>${api.data[i].symbol}</p>
+                    <h6>Primeiro registro histórico</h6>
+                    <p>${new Date(api.data[i].first_historical_data)}<p>
+                </div>
+                `
+            }
+
+            document.getElementById('coins').innerHTML = coinsContentHTML;
+            console.log(api);
+        })
+        .catch(console.error); // Erro de rede.
+
+    </script>
+</body>
+</html>
